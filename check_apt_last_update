@@ -3,7 +3,7 @@
 # plugin to check how long since the last update was done
 # shamelessly based on check_yum
 
-__author__  = "Hamish Downer"
+__author__  = "Hamish Downer, elysium, EgoretZ"
 __title__   = "Nagios Plugin for checking days since last Apt upgrade on Debian/Ubuntu systems"
 __version__ = "0.0.3"
 
@@ -16,7 +16,7 @@ UNKNOWN  = 3
 
 import os
 from datetime import date
-import sys
+import sys, gzip
 import signal
 from optparse import OptionParser
 
