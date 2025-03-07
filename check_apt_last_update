@@ -3,7 +3,7 @@
 # plugin to check how long since the last update was done
 # shamelessly based on check_yum
 
-__author__  = "Hamish Downer, elysium, EgoretZ"
+__author__  = "Hamish Downer, updated by elysium, EgoretZ"
 __title__   = "Nagios Plugin for checking days since last Apt upgrade on Debian/Ubuntu systems"
 __version__ = "0.0.3"
 
@@ -56,6 +56,16 @@ def check_apt_usable():
     elif not os.access(APT, os.X_OK):
         end(UNKNOWN, "%s is not executable" % APT)
 
+# from https://note.nkmk.me/en/python-sort-num-str/#some-strings-do-not-contain-numbers
+# added to do numeric sorting of log files
+p = re.compile(r'(\d+)')
+
+def extract_num(s, p, ret=0):
+    search = p.search(s)
+    if search:
+       return int(search.groups()[0])
+    else:
+       return ret
 
 class AptUpdateChecker(object):
     def __init__(self):
@@ -227,7 +237,7 @@ class AptUpdateChecker(object):
 
         # search for Upgrade: in history.log, or if not found, in history.log.1.gz
         logdir = '/var/log/apt'
-        apt_logs = sorted([f for f in os.listdir(logdir) if f.startswith('history.log')])
+        apt_logs = sorted([f for f in os.listdir(logdir) if f.startswith('history.log')], key=lambda s: extract_num(s, p))
         last_update = None
         for logfile in apt_logs:
             self.vprint(3, 'Trying logfile %s' % logfile)
