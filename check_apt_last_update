@@ -18,6 +18,7 @@ import os
 from datetime import date
 import sys, gzip
 import signal
+import re
 from optparse import OptionParser
 
 DEFAULT_TIMEOUT = 30
